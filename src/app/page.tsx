@@ -1,103 +1,184 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import React, { useMemo, useState } from 'react';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
+import { HeroSlider } from '@/components/movie/HeroSlider';
+import { FilterBar } from '@/components/movie/FilterBar';
+import { MovieRow } from '@/components/movie/MovieRow';
+import { MovieCard } from '@/components/movie/MovieCard';
+import { CinemaPlayerModal } from '@/components/player/CinemaPlayerModal';
+import { PricingModal } from '@/components/pricing/PricingModal';
+import { MOCK_MOVIES } from '@/data/mock-movies';
+import { Movie } from '@/types/movie';
+import { useCinemaStore } from '@/store/cinema-store';
+import { Sparkles, Film, Heart } from 'lucide-react';
+
+export default function HomePage() {
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [pricingOpen, setPricingOpen] = useState(false);
+
+  const {
+    searchQuery,
+    selectedCategory,
+    selectedAIStyle,
+    selectedAccessType,
+  } = useCinemaStore();
+
+  // Realtime Filter logic
+  const filteredMovies = useMemo(() => {
+    return MOCK_MOVIES.filter((movie) => {
+      // 1. Search Query
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchTitle = movie.title.toLowerCase().includes(q);
+        const matchDirector = movie.director.toLowerCase().includes(q);
+        const matchStyle = movie.aiStyle.toLowerCase().includes(q);
+        const matchTool = movie.aiTools.some((t) => t.toLowerCase().includes(q));
+        if (!matchTitle && !matchDirector && !matchStyle && !matchTool) {
+          return false;
+        }
+      }
+
+      // 2. Category
+      if (selectedCategory !== 'Tất cả' && movie.category !== selectedCategory) {
+        return false;
+      }
+
+      // 3. AI Style
+      if (selectedAIStyle !== 'Tất cả' && movie.aiStyle !== selectedAIStyle) {
+        return false;
+      }
+
+      // 4. Access Type
+      if (selectedAccessType !== 'all' && movie.accessType !== selectedAccessType) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [searchQuery, selectedCategory, selectedAIStyle, selectedAccessType]);
+
+  // Group movies by category for row carousels
+  const coTrangMovies = MOCK_MOVIES.filter((m) => m.aiStyle === 'Cổ trang Dã sử');
+  const cyberpunkMovies = MOCK_MOVIES.filter((m) => m.aiStyle === 'Cyberpunk Việt Nam');
+  const animeMovies = MOCK_MOVIES.filter((m) => m.aiStyle === 'Anime Cinematic');
+  const danGianMovies = MOCK_MOVIES.filter((m) => m.aiStyle === 'Dân gian & Sơn mài');
+
+  const isFilteringActive =
+    Boolean(searchQuery.trim()) ||
+    selectedCategory !== 'Tất cả' ||
+    selectedAIStyle !== 'Tất cả' ||
+    selectedAccessType !== 'all';
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300">
+      {/* Schema.org Movie JSON-LD SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'MovieSeries',
+            name: 'Phim Nhà Làm - AI Video Cinema',
+            description: 'Nền tảng phim ngắn và điện ảnh sáng tạo bằng công nghệ AI thuần Việt.',
+            genre: ['Sci-Fi', 'Historical', 'Animation', 'Horror'],
+            inLanguage: 'vi',
+          }),
+        }}
+      />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Top Navbar */}
+      <Navbar />
+
+      <main className="flex-1">
+        {/* Hero 4K Cinema Slider */}
+        <HeroSlider movies={MOCK_MOVIES} onSelectMovie={setSelectedMovie} />
+
+        {/* Catalog Section with Realtime Multi-Filter */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
+          <FilterBar />
+
+          {/* Conditional View: Search / Filter Results Grid OR Categorized Rows */}
+          {isFilteringActive ? (
+            <section className="space-y-4 py-4">
+              <div className="flex items-center justify-between">
+                <h2 className="font-lora text-xl sm:text-2xl font-bold text-[var(--text-primary)] flex items-center gap-2">
+                  <Film className="w-5 h-5 text-[#B83A26]" />
+                  <span>Kết Quả Tìm Kiếm & Lọc ({filteredMovies.length} phim)</span>
+                </h2>
+              </div>
+
+              {filteredMovies.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+                  {filteredMovies.map((movie) => (
+                    <MovieCard key={movie.id} movie={movie} onSelect={setSelectedMovie} />
+                  ))}
+                </div>
+              ) : (
+                <div className="py-16 text-center space-y-2">
+                  <p className="font-lora text-lg text-[var(--text-muted)]">
+                    Không tìm thấy phim AI phù hợp với từ khóa hoặc tiêu chí đã chọn.
+                  </p>
+                  <p className="text-xs text-[var(--text-muted)]">
+                    Hãy thử chọn lại &quot;Tất cả&quot; hoặc xóa bớt tiêu chí lọc.
+                  </p>
+                </div>
+              )}
+            </section>
+          ) : (
+            <div className="space-y-8">
+              {/* Category Rows */}
+              <MovieRow
+                title="Phim Dã Sử & Cổ Trang AI"
+                subtitle="Tái hiện trang phục, lăng tẩm và võ thuật Việt cổ qua prompt siêu thực"
+                movies={coTrangMovies}
+                onSelectMovie={setSelectedMovie}
+                accentColor="#B83A26"
+              />
+
+              <MovieRow
+                title="Cyberpunk Sài Gòn & Tương Lai"
+                subtitle="Ánh đèn neon Chợ Lớn và xe bay tương lai qua mô hình Kling AI & Runway"
+                movies={cyberpunkMovies}
+                onSelectMovie={setSelectedMovie}
+                accentColor="#E0A030"
+              />
+
+              <MovieRow
+                title="Hoạt Hình & Anime AI"
+                subtitle="Chất hoạt họa Niji phong cách Nhật Bản kết hợp bối cảnh làng quê Việt"
+                movies={animeMovies}
+                onSelectMovie={setSelectedMovie}
+                accentColor="#B83A26"
+              />
+
+              <MovieRow
+                title="Huyền Bí Dân Gian & Tranh Sơn Mài"
+                subtitle="Không khí ma mị, huyền ảo lấy cảm hứng từ nét khắc gỗ và màu sơn cánh gián"
+                movies={danGianMovies}
+                onSelectMovie={setSelectedMovie}
+                accentColor="#E0A030"
+              />
+            </div>
+          )}
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      {/* Footer */}
+      <Footer />
+
+      {/* Video Cinema Player Modal (HLS.js / Fullscreen Mobile Gestures) */}
+      {selectedMovie && (
+        <CinemaPlayerModal
+          movie={selectedMovie}
+          onClose={() => setSelectedMovie(null)}
+          onOpenPricing={() => setPricingOpen(true)}
+        />
+      )}
+
+      {/* Commercial Pricing Modal (VIP + PPV + PayOS SSE Mockup) */}
+      <PricingModal isOpen={pricingOpen} onClose={() => setPricingOpen(false)} />
     </div>
   );
 }
