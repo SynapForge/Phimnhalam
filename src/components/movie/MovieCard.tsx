@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Movie } from '@/types/movie';
 import { useCinemaStore } from '@/store/cinema-store';
 import { Play, Bookmark, Check, Sparkles, Clock, Eye } from 'lucide-react';
 
 interface MovieCardProps {
   movie: Movie;
-  onSelect: (movie: Movie) => void;
+  onSelect?: (movie: Movie) => void;
 }
 
 export const MovieCard: React.FC<MovieCardProps> = ({ movie, onSelect }) => {
@@ -32,19 +34,29 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onSelect }) => {
     }
   };
 
+  const router = useRouter();
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (onSelect) {
+      onSelect(movie);
+    } else {
+      router.push(`/movie/${movie.slug}`);
+    }
+  };
+
   return (
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onClick={() => onSelect(movie)}
-      className="group relative flex-shrink-0 w-60 sm:w-68 rounded-xl overflow-hidden bg-[var(--bg-surface)] border border-[var(--border-color)] hover:border-[#E0A030] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer select-none"
+      onClick={handleClick}
+      className="group relative flex-shrink-0 w-44 sm:w-52 md:w-56 rounded-xl overflow-hidden bg-[var(--bg-surface)] border border-[var(--border-color)] hover:border-[#E0A030] transition-all duration-300 hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer select-none"
     >
-      {/* Media Box: Poster + Hover Video Teaser */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/40">
+      {/* Media Box: Vertical Poster (9:16) + Hover Video Teaser */}
+      <div className="relative aspect-[9/16] w-full overflow-hidden bg-black/40">
         <img
           src={movie.posterUrl}
           alt={movie.title}
-          className={`w-full h-full object-cover transition-opacity duration-300 ${
+          className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
             isHovered ? 'opacity-0' : 'opacity-100'
           }`}
           loading="lazy"

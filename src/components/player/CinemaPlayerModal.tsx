@@ -161,17 +161,17 @@ export const CinemaPlayerModal: React.FC<CinemaPlayerModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-2 sm:p-4">
       <div
         ref={containerRef}
-        className="relative w-full max-w-5xl rounded-2xl overflow-hidden bg-[var(--bg-surface)] border border-[var(--border-color)] shadow-2xl flex flex-col max-h-[95vh]"
+        className="relative w-full max-w-md sm:max-w-lg md:max-w-xl rounded-2xl overflow-hidden bg-[var(--bg-surface)] border border-[var(--border-color)] shadow-2xl flex flex-col max-h-[96vh]"
       >
         {/* Top Header bar */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-color)] bg-[var(--bg-primary)]">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#B83A26] animate-ping" />
-            <span className="font-lora text-base font-bold text-[var(--text-primary)]">
+            <span className="font-lora text-base font-bold text-[var(--text-primary)] truncate max-w-[240px] sm:max-w-xs">
               {movie.title}
             </span>
-            <span className="text-xs text-[var(--text-muted)] hidden sm:inline">
-              ({movie.quality} • Hls.js Adaptive Stream)
+            <span className="text-[10px] sm:text-xs text-[var(--text-muted)] hidden sm:inline">
+              (9:16 Dọc • {movie.quality})
             </span>
           </div>
 
@@ -183,8 +183,8 @@ export const CinemaPlayerModal: React.FC<CinemaPlayerModalProps> = ({
           </button>
         </div>
 
-        {/* Video Player Box */}
-        <div className="relative aspect-video w-full bg-black flex items-center justify-center group">
+        {/* Video Player Box: 9:16 Vertical Ratio */}
+        <div className="relative aspect-[9/16] max-h-[65vh] w-full bg-black flex items-center justify-center group mx-auto">
           <video
             ref={videoRef}
             playsInline

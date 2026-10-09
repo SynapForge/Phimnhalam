@@ -23,9 +23,12 @@ interface CinemaStoreState {
   watchlist: string[]; // movie IDs
   toggleWatchlist: (movieId: string) => void;
   isInWatchlist: (movieId: string) => boolean;
+  clearWatchlist: () => void;
 
-  watchHistory: { movieId: string; timestamp: number; progressSeconds: number }[];
-  addToHistory: (movieId: string, progressSeconds: number) => void;
+  watchHistory: { movieId: string; timestamp: number; progressSeconds: number; episode?: number }[];
+  addToHistory: (movieId: string, progressSeconds: number, episode?: number) => void;
+  removeFromHistory: (movieId: string) => void;
+  clearWatchHistory: () => void;
 
   // Modal Player / Preview State
   activePreviewMovieId: string | null;
@@ -81,7 +84,7 @@ export const useCinemaStore = create<CinemaStoreState>()(
         }),
 
       // Watchlist
-      watchlist: ['phim-1', 'phim-3'],
+      watchlist: ['42000015197', '41000105764'],
       toggleWatchlist: (movieId) => {
         const current = get().watchlist;
         const exists = current.includes(movieId);
@@ -90,20 +93,28 @@ export const useCinemaStore = create<CinemaStoreState>()(
         });
       },
       isInWatchlist: (movieId) => get().watchlist.includes(movieId),
+      clearWatchlist: () => set({ watchlist: [] }),
 
       // History
       watchHistory: [
-        { movieId: 'phim-1', timestamp: Date.now() - 3600000, progressSeconds: 142 },
+        { movieId: '42000015197', timestamp: Date.now() - 1800000, progressSeconds: 85, episode: 1 },
+        { movieId: '41000105764', timestamp: Date.now() - 7200000, progressSeconds: 110, episode: 2 },
       ],
-      addToHistory: (movieId, progressSeconds) => {
+      addToHistory: (movieId, progressSeconds, episode = 1) => {
         const filtered = get().watchHistory.filter((item) => item.movieId !== movieId);
         set({
           watchHistory: [
-            { movieId, timestamp: Date.now(), progressSeconds },
-            ...filtered.slice(0, 19), // keep latest 20
+            { movieId, timestamp: Date.now(), progressSeconds, episode },
+            ...filtered.slice(0, 29), // keep latest 30
           ],
         });
       },
+      removeFromHistory: (movieId) => {
+        set({
+          watchHistory: get().watchHistory.filter((item) => item.movieId !== movieId),
+        });
+      },
+      clearWatchHistory: () => set({ watchHistory: [] }),
 
       // Preview
       activePreviewMovieId: null,

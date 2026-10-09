@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSlider } from '@/components/movie/HeroSlider';
@@ -12,11 +13,16 @@ import { PricingModal } from '@/components/pricing/PricingModal';
 import { MOCK_MOVIES } from '@/data/mock-movies';
 import { Movie } from '@/types/movie';
 import { useCinemaStore } from '@/store/cinema-store';
-import { Sparkles, Film, Heart } from 'lucide-react';
+import { Film } from 'lucide-react';
 
 export default function HomePage() {
+  const router = useRouter();
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const [pricingOpen, setPricingOpen] = useState(false);
+
+  const handleSelectMovie = (movie: Movie) => {
+    router.push(`/movie/${movie.slug}`);
+  };
 
   const {
     searchQuery,
@@ -93,7 +99,7 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero 4K Cinema Slider */}
-        <HeroSlider movies={MOCK_MOVIES} onSelectMovie={setSelectedMovie} />
+        <HeroSlider movies={MOCK_MOVIES} onSelectMovie={handleSelectMovie} />
 
         {/* Catalog Section with Realtime Multi-Filter */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
@@ -110,9 +116,9 @@ export default function HomePage() {
               </div>
 
               {filteredMovies.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
                   {filteredMovies.map((movie) => (
-                    <MovieCard key={movie.id} movie={movie} onSelect={setSelectedMovie} />
+                    <MovieCard key={movie.id} movie={movie} onSelect={handleSelectMovie} />
                   ))}
                 </div>
               ) : (
@@ -133,7 +139,7 @@ export default function HomePage() {
                 title="Phim Dã Sử & Cổ Trang AI"
                 subtitle="Tái hiện trang phục, lăng tẩm và võ thuật Việt cổ qua prompt siêu thực"
                 movies={coTrangMovies}
-                onSelectMovie={setSelectedMovie}
+                onSelectMovie={handleSelectMovie}
                 accentColor="#B83A26"
               />
 
@@ -141,7 +147,7 @@ export default function HomePage() {
                 title="Cyberpunk Sài Gòn & Tương Lai"
                 subtitle="Ánh đèn neon Chợ Lớn và xe bay tương lai qua mô hình Kling AI & Runway"
                 movies={cyberpunkMovies}
-                onSelectMovie={setSelectedMovie}
+                onSelectMovie={handleSelectMovie}
                 accentColor="#E0A030"
               />
 
@@ -149,7 +155,7 @@ export default function HomePage() {
                 title="Hoạt Hình & Anime AI"
                 subtitle="Chất hoạt họa Niji phong cách Nhật Bản kết hợp bối cảnh làng quê Việt"
                 movies={animeMovies}
-                onSelectMovie={setSelectedMovie}
+                onSelectMovie={handleSelectMovie}
                 accentColor="#B83A26"
               />
 
@@ -157,7 +163,7 @@ export default function HomePage() {
                 title="Huyền Bí Dân Gian & Tranh Sơn Mài"
                 subtitle="Không khí ma mị, huyền ảo lấy cảm hứng từ nét khắc gỗ và màu sơn cánh gián"
                 movies={danGianMovies}
-                onSelectMovie={setSelectedMovie}
+                onSelectMovie={handleSelectMovie}
                 accentColor="#E0A030"
               />
             </div>

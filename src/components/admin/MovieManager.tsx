@@ -131,8 +131,8 @@ export const MovieManager: React.FC = () => {
                   <td className="p-4 font-mono text-[var(--text-primary)]">
                     {movie.quality}
                   </td>
-                  <td className="p-4 text-[var(--text-primary)] font-semibold">
-                    {movie.views.toLocaleString()}
+                  <td className="p-4 text-[var(--text-primary)] font-semibold" suppressHydrationWarning>
+                    {movie.views.toLocaleString('vi-VN')}
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-2">

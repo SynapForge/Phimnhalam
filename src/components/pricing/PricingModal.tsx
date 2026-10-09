@@ -99,8 +99,8 @@ export const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) =
                     </div>
 
                     <div className="pt-2">
-                      <span className="text-2xl font-extrabold text-[var(--text-primary)]">
-                        {plan.price.toLocaleString()}đ
+                      <span className="text-2xl font-extrabold text-[var(--text-primary)]" suppressHydrationWarning>
+                        {plan.price.toLocaleString('vi-VN')}đ
                       </span>
                       <span className="text-xs text-[var(--text-muted)] ml-1">
                         / {plan.billingCycle}
@@ -146,8 +146,8 @@ export const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) =
                   <h3 className="font-lora text-xl font-bold text-[var(--text-primary)]">
                     Quét Mã PayOS Để Kích Hoạt
                   </h3>
-                  <p className="text-xs text-[var(--text-muted)]">
-                    Gói: <strong className="text-[var(--text-primary)]">{selectedPlan.name}</strong> • Số tiền: <strong className="text-[#E0A030]">{selectedPlan.price.toLocaleString()}đ</strong>
+                  <p className="text-xs text-[var(--text-muted)]" suppressHydrationWarning>
+                    Gói: <strong className="text-[var(--text-primary)]">{selectedPlan.name}</strong> • Số tiền: <strong className="text-[#E0A030]">{selectedPlan.price.toLocaleString('vi-VN')}đ</strong>
                   </p>
                 </div>
 

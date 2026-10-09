@@ -92,27 +92,6 @@ export const FilterBar: React.FC = () => {
           )}
         </div>
       </div>
-
-      {/* AI Style Chip Row */}
-      <div id="ai-styles" className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
-        <span className="text-xs font-medium text-[var(--text-muted)] flex items-center gap-1 mr-1 flex-shrink-0">
-          <Sparkles className="w-3.5 h-3.5 text-[#E0A030]" />
-          <span>Phong cách AI:</span>
-        </span>
-        {AI_STYLES.map((style) => (
-          <button
-            key={style}
-            onClick={() => setSelectedAIStyle(style)}
-            className={`px-3 py-1 rounded-md whitespace-nowrap text-xs transition-colors cursor-pointer border ${
-              selectedAIStyle === style
-                ? 'bg-[rgba(224,160,48,0.2)] border-[#E0A030] text-[#E0A030] font-semibold'
-                : 'border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-surface)]'
-            }`}
-          >
-            {style}
-          </button>
-        ))}
-      </div>
     </div>
   );
 };
