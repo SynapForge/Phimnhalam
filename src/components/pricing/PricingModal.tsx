@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { MOCK_PRICING_PLANS } from '@/data/mock-movies';
 import { PricingPlan } from '@/types/movie';
-import { Crown, Check, QrCode, Sparkles, CheckCircle2, X } from 'lucide-react';
+import { Crown, Check, CheckCircle2, X } from 'lucide-react';
 
 interface PricingModalProps {
   isOpen: boolean;

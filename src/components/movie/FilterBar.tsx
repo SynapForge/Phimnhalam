@@ -39,21 +39,17 @@ export const FilterBar: React.FC = () => {
     selectedAccessType !== 'all';
 
   return (
-    <div id="the-loai" className="w-full space-y-4 py-6 border-b border-[var(--border-color)]">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        {/* Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-          <span className="text-xs font-semibold text-[var(--text-muted)] flex items-center gap-1.5 mr-1 flex-shrink-0">
-            <Filter className="w-3.5 h-3.5 text-[#E0A030]" />
-            <span>Thể loại:</span>
-          </span>
+    <div id="the-loai" className="w-full py-4 border-b border-[var(--border-color)]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        {/* Category Pills (Unified & Clean, no redundant label text) */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-200 cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-[#B83A26] text-[#F5EEE1] shadow-sm'
+                  ? 'bg-[#B83A26] text-[#F5EEE1] shadow-sm font-semibold'
                   : 'bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-elevated)] border border-[var(--border-color)]'
               }`}
             >
@@ -62,21 +58,20 @@ export const FilterBar: React.FC = () => {
           ))}
         </div>
 
-        {/* Access Type Filter: All / Free / VIP / PPV */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-xs text-[var(--text-muted)] font-medium">Quyền xem:</span>
+        {/* Access Type Quick Switch: All / Free / VIP / PPV */}
+        <div className="flex items-center gap-2 flex-shrink-0 self-start sm:self-auto">
           <div className="flex rounded-lg bg-[var(--bg-surface)] p-0.5 border border-[var(--border-color)] text-xs">
             {(['all', 'free', 'vip', 'ppv'] as const).map((type) => (
               <button
                 key={type}
                 onClick={() => setSelectedAccessType(type)}
-                className={`px-2.5 py-1 rounded-md font-medium capitalize cursor-pointer transition-colors ${
+                className={`px-2.5 py-1 rounded-md font-medium cursor-pointer transition-colors ${
                   selectedAccessType === type
-                    ? 'bg-[var(--bg-primary)] text-[var(--text-primary)] shadow-xs'
+                    ? 'bg-[#B83A26] text-[#F5EEE1] shadow-xs font-semibold'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
-                {type === 'all' ? 'Tất cả' : type === 'free' ? 'Free' : type === 'vip' ? 'VIP' : 'Vé 19K'}
+                {type === 'all' ? 'Tất cả' : type === 'free' ? 'Miễn phí' : type === 'vip' ? 'VIP' : 'Vé 19K'}
               </button>
             ))}
           </div>
@@ -84,7 +79,7 @@ export const FilterBar: React.FC = () => {
           {isFiltered && (
             <button
               onClick={resetFilters}
-              className="p-1.5 rounded-md text-[var(--text-muted)] hover:text-[#B83A26] transition-colors"
+              className="p-1.5 rounded-md text-[var(--text-muted)] hover:text-[#B83A26] transition-colors cursor-pointer"
               title="Đặt lại bộ lọc"
             >
               <RotateCcw className="w-4 h-4" />

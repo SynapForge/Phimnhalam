@@ -104,10 +104,10 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onSelect }) => {
           {inWatchlist ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Bookmark className="w-3.5 h-3.5" />}
         </button>
 
-        {/* Play Overlay Button on hover */}
+        {/* Play Overlay Button on hover with smooth zoom and subtle rotation */}
         {isHovered && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
-            <div className="w-10 h-10 rounded-full bg-[#B83A26] text-[#F5EEE1] flex items-center justify-center shadow-lg transform scale-110 transition-transform">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none transition-all duration-300">
+            <div className="w-11 h-11 rounded-full bg-[#B83A26] text-[#F5EEE1] flex items-center justify-center shadow-2xl transform scale-110 rotate-6 transition-all duration-300 ring-2 ring-[#E0A030]/50">
               <Play className="w-4 h-4 fill-current ml-0.5" />
             </div>
           </div>

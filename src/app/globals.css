@@ -67,6 +67,48 @@ html.light .cinema-glass {
   -webkit-backdrop-filter: blur(12px);
 }
 
+/* Micro-animations */
+@keyframes kenburns {
+  0% { transform: scale(1.02); }
+  50% { transform: scale(1.08) translate(-0.5%, -0.5%); }
+  100% { transform: scale(1.02); }
+}
+
+.animate-kenburns {
+  animation: kenburns 16s ease-in-out infinite alternate;
+}
+
+@keyframes goldGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(224, 160, 48, 0.2); }
+  50% { box-shadow: 0 0 25px rgba(224, 160, 48, 0.45); }
+}
+
+.glow-gold {
+  animation: goldGlow 3s ease-in-out infinite;
+}
+
+/* Accessibility: Respect Reduced Motion Settings */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-kenburns,
+  .glow-gold {
+    animation: none !important;
+  }
+}
+
+/* Accessible Focus Outline */
+:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 8px;

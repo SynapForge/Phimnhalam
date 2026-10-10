@@ -8,6 +8,7 @@ import { HeroSlider } from '@/components/movie/HeroSlider';
 import { FilterBar } from '@/components/movie/FilterBar';
 import { MovieRow } from '@/components/movie/MovieRow';
 import { MovieCard } from '@/components/movie/MovieCard';
+import { CinemaNoticeBanner } from '@/components/movie/CinemaNoticeBanner';
 import { CinemaPlayerModal } from '@/components/player/CinemaPlayerModal';
 import { PricingModal } from '@/components/pricing/PricingModal';
 import { MOCK_MOVIES } from '@/data/mock-movies';
@@ -101,6 +102,9 @@ export default function HomePage() {
         {/* Hero 4K Cinema Slider */}
         <HeroSlider movies={MOCK_MOVIES} onSelectMovie={handleSelectMovie} />
 
+        {/* Festival / Cinema Notice Event Banner */}
+        <CinemaNoticeBanner />
+
         {/* Catalog Section with Realtime Multi-Filter */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
           <FilterBar />
@@ -122,13 +126,29 @@ export default function HomePage() {
                   ))}
                 </div>
               ) : (
-                <div className="py-16 text-center space-y-2">
-                  <p className="font-lora text-lg text-[var(--text-muted)]">
-                    Không tìm thấy phim AI phù hợp với từ khóa hoặc tiêu chí đã chọn.
-                  </p>
-                  <p className="text-xs text-[var(--text-muted)]">
-                    Hãy thử chọn lại &quot;Tất cả&quot; hoặc xóa bớt tiêu chí lọc.
-                  </p>
+                <div className="py-16 text-center space-y-4 max-w-md mx-auto p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-color)]">
+                  <div className="w-12 h-12 rounded-full bg-[#E0A030]/15 text-[#E0A030] flex items-center justify-center mx-auto">
+                    <Film className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-lora text-lg font-bold text-[var(--text-primary)]">
+                      {useCinemaStore.getState().language === 'vi' ? 'Không tìm thấy phim AI phù hợp' : 'No matching AI movies found'}
+                    </h3>
+                    <p className="text-xs text-[var(--text-muted)] mt-1">
+                      {useCinemaStore.getState().language === 'vi'
+                        ? 'Hãy thử tìm kiếm với từ khóa khác hoặc thiết lập lại bộ lọc để xem toàn bộ rạp chiếu.'
+                        : 'Try searching with different keywords or reset filters to explore the full catalog.'}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const store = useCinemaStore.getState();
+                      store.resetFilters();
+                    }}
+                    className="px-5 py-2 rounded-full bg-[#B83A26] hover:bg-[#a03220] text-[#F5EEE1] text-xs font-bold transition-transform hover:scale-105 cursor-pointer shadow"
+                  >
+                    {useCinemaStore.getState().language === 'vi' ? 'Xem Toàn Bộ Kho Phim' : 'Explore All Movies'}
+                  </button>
                 </div>
               )}
             </section>

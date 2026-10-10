@@ -39,6 +39,8 @@ export const CinemaPlayerModal: React.FC<CinemaPlayerModalProps> = ({
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
+  const [isBuffering, setIsBuffering] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(
     movie.episodes ? movie.episodes[0] : null
   );
@@ -198,9 +200,52 @@ export const CinemaPlayerModal: React.FC<CinemaPlayerModalProps> = ({
               }
             }}
             onEnded={() => setIsPlaying(false)}
+            onWaiting={() => setIsBuffering(true)}
+            onPlaying={() => {
+              setIsBuffering(false);
+              setHasError(false);
+            }}
+            onError={() => {
+              setIsBuffering(false);
+              setHasError(true);
+            }}
             onClick={togglePlay}
             className="w-full h-full object-contain cursor-pointer"
           />
+
+          {/* Buffering Indicator */}
+          {isBuffering && !hasError && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 pointer-events-none">
+              <div className="w-10 h-10 border-3 border-[#E0A030] border-t-transparent rounded-full animate-spin" />
+              <span className="text-[11px] text-[#F5EEE1] mt-2 font-medium">Đang tải luồng chiếu 4K...</span>
+            </div>
+          )}
+
+          {/* Network Error Fallback & Retry Button */}
+          {hasError && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 p-6 text-center z-30 space-y-3">
+              <span className="w-3 h-3 rounded-full bg-rose-500 animate-ping" />
+              <p className="text-xs text-[var(--text-primary)] font-bold">
+                Không thể kết nối đến luồng phát video AI
+              </p>
+              <p className="text-[10px] text-[var(--text-muted)] max-w-xs">
+                Đường truyền mạng bị gián đoạn hoặc định dạng video đang được máy chủ xử lý lại.
+              </p>
+              <button
+                onClick={() => {
+                  setHasError(false);
+                  setIsBuffering(true);
+                  if (videoRef.current) {
+                    videoRef.current.load();
+                    videoRef.current.play().catch(() => {});
+                  }
+                }}
+                className="px-4 py-1.5 rounded-full bg-[#B83A26] hover:bg-[#a03220] text-[#F5EEE1] text-xs font-bold transition-transform hover:scale-105 cursor-pointer shadow-lg"
+              >
+                Thử Lại Kết Nối
+              </button>
+            </div>
+          )}
 
           {/* Quick Double-tap Mobile zones simulation */}
           <div

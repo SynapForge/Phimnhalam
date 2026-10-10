@@ -8,6 +8,11 @@ interface CinemaStoreState {
   toggleTheme: () => void;
   setTheme: (theme: 'dark' | 'light') => void;
 
+  // Language state (i18n)
+  language: 'vi' | 'en';
+  setLanguage: (lang: 'vi' | 'en') => void;
+  toggleLanguage: () => void;
+
   // Realtime Filter state
   searchQuery: string;
   setSearchQuery: (query: string) => void;
@@ -64,6 +69,14 @@ export const useCinemaStore = create<CinemaStoreState>()(
           }
         }
         set({ theme });
+      },
+
+      // Language (i18n)
+      language: 'vi',
+      setLanguage: (language) => set({ language }),
+      toggleLanguage: () => {
+        const nextLang = get().language === 'vi' ? 'en' : 'vi';
+        set({ language: nextLang });
       },
 
       // Filters
@@ -124,6 +137,7 @@ export const useCinemaStore = create<CinemaStoreState>()(
       name: 'phimnhalam-cinema-storage',
       partialize: (state) => ({
         theme: state.theme,
+        language: state.language,
         watchlist: state.watchlist,
         watchHistory: state.watchHistory,
       }),

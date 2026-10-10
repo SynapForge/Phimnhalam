@@ -8,7 +8,6 @@ import {
   Film,
   CalendarCheck,
   TrendingUp,
-  Settings,
   ArrowLeft,
 } from 'lucide-react';
 

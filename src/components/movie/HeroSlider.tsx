@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Movie } from '@/types/movie';
 import { useCinemaStore } from '@/store/cinema-store';
+import { DICTIONARY } from '@/types/i18n';
 import { Play, Bookmark, Check, Eye, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
 interface HeroSliderProps {
@@ -13,7 +14,8 @@ interface HeroSliderProps {
 export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const { watchlist, toggleWatchlist } = useCinemaStore();
+  const { watchlist, toggleWatchlist, language } = useCinemaStore();
+  const t = DICTIONARY[language];
 
   const featured = useMemo(() => {
     const list = movies.filter((m) => m.isFeatured);
@@ -61,12 +63,12 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie })
       onMouseLeave={() => setIsPaused(false)}
       className="relative w-full h-[65vh] min-h-[460px] max-h-[620px] overflow-hidden select-none bg-[var(--bg-primary)] border-b border-[var(--border-color)] flex items-center"
     >
-      {/* Ambient background glow from the active movie poster */}
+      {/* Ambient background glow from the active movie poster with slow Ken-burns effect */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img
           src={activeMovie.posterUrl}
           alt={activeMovie.title}
-          className="w-full h-full object-cover filter blur-3xl opacity-25 scale-125 transition-all duration-700"
+          className="w-full h-full object-cover filter blur-3xl opacity-30 scale-125 transition-all duration-1000 animate-kenburns"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-primary)] via-[var(--bg-primary)]/80 to-[var(--bg-primary)]/60" />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-[var(--bg-primary)]/40" />
@@ -129,10 +131,10 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie })
           <div className="flex items-center gap-3 pt-2">
             <button
               onClick={() => onSelectMovie(activeMovie)}
-              className="flex items-center gap-2 px-6 sm:px-8 py-3 rounded-full bg-[#B83A26] hover:bg-[#a03220] text-[#F5EEE1] font-bold text-xs sm:text-sm shadow-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+              className="flex items-center gap-2 px-6 sm:px-8 py-3 rounded-full bg-[#B83A26] hover:bg-[#a03220] text-[#F5EEE1] font-bold text-xs sm:text-sm shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer glow-gold"
             >
               <Play className="w-4 h-4 fill-current ml-0.5" />
-              <span>Xem Phim Ngay</span>
+              <span>{t.heroWatchNow}</span>
             </button>
 
             <button
@@ -142,12 +144,12 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie })
               {inWatchlist ? (
                 <>
                   <Check className="w-4 h-4 text-emerald-400" />
-                  <span>Đã Lưu</span>
+                  <span>{t.heroSaved}</span>
                 </>
               ) : (
                 <>
                   <Bookmark className="w-4 h-4" />
-                  <span>Xem Sau</span>
+                  <span>{t.heroSave}</span>
                 </>
               )}
             </button>
