@@ -76,7 +76,7 @@ export const FilterBar: React.FC = () => {
               <button
                 key={type}
                 onClick={() => setSelectedAccessType(type)}
-                className={`flex-1 sm:flex-initial min-h-[34px] px-3 py-1 rounded-lg font-medium cursor-pointer transition-colors text-center select-none ${
+                className={`flex-1 sm:flex-initial min-h-[34px] px-2 sm:px-3 py-1 rounded-lg font-medium cursor-pointer transition-colors text-center select-none text-[11px] sm:text-xs whitespace-nowrap ${
                   selectedAccessType === type
                     ? 'bg-[#B83A26] text-[#F5EEE1] shadow-xs font-semibold'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'

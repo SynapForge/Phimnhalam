@@ -238,7 +238,7 @@ export const Navbar: React.FC<NavbarProps> = ({ showMobileSearch = true }) => {
             {/* Primary Action Button: Vào Rạp VIP (Trigger Auth & VIP flow) */}
             <button
               onClick={handleVipClick}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#B83A26] hover:bg-[#a03220] text-[#F5EEE1] text-xs font-bold shadow-md transition-all duration-300 hover:scale-105 active:scale-95 animate-shimmer cursor-pointer"
+              className="inline-flex items-center gap-1 sm:gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#B83A26] hover:bg-[#a03220] text-[#F5EEE1] text-[11px] sm:text-xs font-bold shadow-md transition-all duration-300 hover:scale-105 active:scale-95 animate-shimmer cursor-pointer flex-shrink-0"
             >
               <Crown className="w-3.5 h-3.5 text-[#E0A030]" />
               <span>{user?.isVip ? 'Đã Có VIP' : t.navVipBtn}</span>

@@ -25,22 +25,25 @@ export const MovieRow: React.FC<MovieRowProps> = ({
   return (
     <section className="w-full space-y-3 py-4">
       {/* Row Header */}
-      <div className="flex items-end justify-between">
-        <div>
+      <div className="flex items-end justify-between gap-2">
+        <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-4.5 rounded-full" style={{ backgroundColor: accentColor }} />
-            <h2 className="font-lora text-xl sm:text-2xl font-bold text-[var(--text-primary)]">
+            <span
+              className="w-1.5 h-4.5 rounded-full flex-shrink-0"
+              style={{ backgroundColor: accentColor }}
+            />
+            <h2 className="font-lora text-lg sm:text-2xl font-bold text-[var(--text-primary)] truncate">
               {title}
             </h2>
           </div>
           {subtitle && (
-            <p className="text-xs text-[var(--text-muted)] mt-0.5 ml-3.5">
+            <p className="text-xs text-[var(--text-muted)] mt-0.5 ml-3.5 line-clamp-1 sm:line-clamp-none">
               {subtitle}
             </p>
           )}
         </div>
 
-        <button className="flex items-center gap-1 text-xs text-[var(--text-secondary)] hover:text-[#B83A26] transition-colors cursor-pointer font-medium">
+        <button className="flex items-center gap-1 text-xs text-[var(--text-secondary)] hover:text-[#B83A26] transition-colors cursor-pointer font-medium flex-shrink-0 whitespace-nowrap pb-0.5">
           <span>Xem tất cả ({movies.length})</span>
           <ChevronRight className="w-3.5 h-3.5" />
         </button>
