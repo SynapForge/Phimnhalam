@@ -6,7 +6,7 @@ import { RevenueStats } from '@/components/admin/RevenueStats';
 import { BookingTable } from '@/components/admin/BookingTable';
 import { MovieManager } from '@/components/admin/MovieManager';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
-import { Bell, ShieldCheck, Film } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 export default function AdminPage() {
   const [currentTab, setCurrentTab] = useState<AdminTab>('overview');

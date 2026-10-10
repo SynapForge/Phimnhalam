@@ -1,63 +1,67 @@
-import React from 'react';
+import React from "react";
 
 interface BrandLogoProps {
   className?: string;
-  variant?: 'dark' | 'light' | 'auto';
+  variant?: "dark" | "light" | "auto";
   showTagline?: boolean;
 }
 
 export const BrandLogo: React.FC<BrandLogoProps> = ({
-  className = '',
+  className = "",
   showTagline = false,
 }) => {
   return (
-    <div className={`flex items-center gap-2.5 select-none cursor-pointer flex-shrink-0 ${className}`}>
-      {/* Icon mark */}
+    <div
+      className={`flex items-center gap-2.5 select-none cursor-pointer flex-shrink-0 ${className}`}
+    >
+      {/* Icon mark: Mái đình cong truyền thống + Hộp video play chuẩn evidence Logo.jpg */}
       <div className="relative w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0">
         <svg
-          viewBox="0 0 120 120"
+          viewBox="0 0 100 88"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full drop-shadow-sm"
+          className="w-full h-full transition-colors duration-200"
         >
-          {/* Temple curved roof top (Mái đình cong) */}
+          {/* Mái đình cong cổ truyền (Temple curved roof with sharp upturned eaves) */}
           <path
-            d="M60 12 C64 12 68 18 70 24 C72 30 76 33 86 35 C96 37 106 32 108 42 C109 47 104 52 94 53 C86 54 80 57 78 61 L42 61 C40 57 34 54 26 53 C16 52 11 47 12 42 C14 32 24 37 34 35 C44 33 48 30 50 24 C52 18 56 12 60 12 Z"
-            fill="currentColor"
-            className="text-[#B83A26]"
+            d="M 50 3 
+               C 53 3, 56 6, 61 10 
+               C 67 14, 73 16, 85 18 
+               C 95 19, 99 15, 100 23 
+               C 97 28, 86 31, 79 32 
+               C 74 33, 72 36, 71 39 
+               L 29 39 
+               C 28 36, 26 33, 21 32 
+               C 14 31, 3 28, 0 23 
+               C 1 15, 5 19, 15 18 
+               C 27 16, 33 14, 39 10 
+               C 44 6, 47 3, 50 3 Z"
+            fill="var(--brand-logo-fill)"
           />
-          {/* Top roof ornament / peak */}
-          <path
-            d="M56 15 C58 11 62 11 64 15 L66 22 L54 22 Z"
-            fill="#E0A030"
-          />
-          {/* Cinema Screen Body with rounded corners */}
+
+          {/* Thân hộp Video Player bo góc mềm mại */}
           <rect
-            x="22"
-            y="54"
-            width="76"
-            height="52"
-            rx="12"
-            fill="currentColor"
-            className="text-[#B83A26]"
+            x="16"
+            y="35"
+            width="68"
+            height="48"
+            rx="10"
+            fill="var(--brand-logo-fill)"
           />
-          {/* Play Triangle button inside (Trắng giấy điệp) */}
-          <path
-            d="M52 68 L74 80 L52 92 Z"
-            fill="#F5EEE1"
-          />
+
+          {/* Nút Play tam giác ở tâm màn hình video */}
+          <path d="M 44 47 L 62 59 L 44 71 Z" fill="var(--brand-logo-play)" />
         </svg>
       </div>
 
-      {/* Brand Name & Optional Tagline */}
+      {/* Brand Name & Optional Tagline (Chỉ đổi màu duy nhất chữ 'Nhà' theo dark/light mode) */}
       <div className="flex flex-col justify-center">
-        <div className="flex items-center whitespace-nowrap leading-none">
-          <span className="font-lora text-lg sm:text-xl font-bold tracking-tight text-[var(--text-primary)]">
-            Phim
+        <div className="flex items-center whitespace-nowrap leading-none font-lora text-lg sm:text-xl font-bold tracking-tight">
+          <span className="text-[var(--text-primary)]">Phim</span>
+          <span className="text-[var(--brand-nha-color)] ml-1.5 mr-1.5 transition-colors duration-200">
+            Nhà
           </span>
-          <span className="font-lora text-lg sm:text-xl font-bold tracking-tight text-[#B83A26] ml-1.5">
-            Nhà Làm
-          </span>
+          <span className="text-[var(--text-primary)]">Làm</span>
         </div>
         {showTagline && (
           <span className="text-[10px] tracking-wider text-[var(--text-muted)] font-medium mt-1">

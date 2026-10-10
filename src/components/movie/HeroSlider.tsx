@@ -1,17 +1,29 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState, useMemo } from 'react';
-import { Movie } from '@/types/movie';
-import { useCinemaStore } from '@/store/cinema-store';
-import { DICTIONARY } from '@/types/i18n';
-import { Play, Bookmark, Check, Eye, ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import React, { useEffect, useState, useMemo } from "react";
+import Image from "next/image";
+import { Movie } from "@/types/movie";
+import { useCinemaStore } from "@/store/cinema-store";
+import { DICTIONARY } from "@/types/i18n";
+import {
+  Play,
+  Bookmark,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Star,
+  Eye,
+} from "lucide-react";
 
 interface HeroSliderProps {
   movies: Movie[];
   onSelectMovie: (movie: Movie) => void;
 }
 
-export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie }) => {
+export const HeroSlider: React.FC<HeroSliderProps> = ({
+  movies,
+  onSelectMovie,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const { watchlist, toggleWatchlist, language } = useCinemaStore();
@@ -65,32 +77,37 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie })
     >
       {/* Ambient background glow from the active movie poster with slow Ken-burns effect */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <img
+        <Image
           src={activeMovie.posterUrl}
           alt={activeMovie.title}
-          className="w-full h-full object-cover filter blur-3xl opacity-30 scale-125 transition-all duration-1000 animate-kenburns"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover filter blur-3xl opacity-30 scale-125 transition-all duration-1000 animate-kenburns"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg-primary)] via-[var(--bg-primary)]/80 to-[var(--bg-primary)]/60" />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-[var(--bg-primary)]/40" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10 py-6">
-        
         {/* LEFT COLUMN (50% - 55%): Comprehensive Movie Info & CTAs */}
         <div className="w-full md:w-[55%] flex flex-col justify-center space-y-3 sm:space-y-4 text-left z-20">
-          
           {/* Top Badges */}
           <div className="flex flex-wrap items-center gap-2 text-xs">
             <span
               className={`px-3 py-0.5 rounded-full font-bold uppercase tracking-wider text-[11px] shadow-sm ${
-                activeMovie.accessType === 'vip'
-                  ? 'bg-[#E0A030] text-[#211D18]'
-                  : activeMovie.accessType === 'ppv'
-                  ? 'bg-[#B83A26] text-[#F5EEE1]'
-                  : 'bg-emerald-600 text-[#F5EEE1]'
+                activeMovie.accessType === "vip"
+                  ? "bg-[#E0A030] text-[#211D18]"
+                  : activeMovie.accessType === "ppv"
+                    ? "bg-[#B83A26] text-[#F5EEE1]"
+                    : "bg-emerald-600 text-[#F5EEE1]"
               }`}
             >
-              {activeMovie.accessType === 'vip' ? 'Gói VIP' : activeMovie.accessType === 'ppv' ? 'Vé Lẻ PPV' : 'Miễn Phí'}
+              {activeMovie.accessType === "vip"
+                ? "Gói VIP"
+                : activeMovie.accessType === "ppv"
+                  ? "Vé Lẻ PPV"
+                  : "Miễn Phí"}
             </span>
 
             <span className="px-2.5 py-0.5 rounded-full font-semibold bg-[rgba(245,238,225,0.15)] text-[var(--text-primary)] border border-[var(--border-color)] backdrop-blur-sm text-[11px]">
@@ -106,9 +123,12 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie })
               • {activeMovie.duration}
             </span>
 
-            <span className="text-[var(--text-muted)] flex items-center gap-1 text-xs" suppressHydrationWarning>
+            <span
+              className="text-[var(--text-muted)] flex items-center gap-1 text-xs"
+              suppressHydrationWarning
+            >
               • <Eye className="w-3.5 h-3.5" />
-              {activeMovie.views.toLocaleString('vi-VN')} lượt xem
+              {activeMovie.views.toLocaleString("vi-VN")} lượt xem
             </span>
           </div>
 
@@ -131,7 +151,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie })
           <div className="flex items-center gap-3 pt-2">
             <button
               onClick={() => onSelectMovie(activeMovie)}
-              className="flex items-center gap-2 px-6 sm:px-8 py-3 rounded-full bg-[#B83A26] hover:bg-[#a03220] text-[#F5EEE1] font-bold text-xs sm:text-sm shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer glow-gold"
+              className="flex items-center gap-2 px-6 sm:px-8 py-3 rounded-full bg-[#B83A26] hover:bg-[#a03220] text-[#F5EEE1] font-bold text-xs sm:text-sm shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer glow-gold animate-shimmer"
             >
               <Play className="w-4 h-4 fill-current ml-0.5" />
               <span>{t.heroWatchNow}</span>
@@ -183,8 +203,8 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie })
                   onClick={() => setCurrentIndex(idx)}
                   className={`h-1.5 transition-all duration-300 rounded-full cursor-pointer ${
                     currentIndex === idx
-                      ? 'w-7 bg-[#E0A030]'
-                      : 'w-2 bg-[rgba(245,238,225,0.25)] hover:bg-[rgba(245,238,225,0.6)]'
+                      ? "w-7 bg-[#E0A030]"
+                      : "w-2 bg-[rgba(245,238,225,0.25)] hover:bg-[rgba(245,238,225,0.6)]"
                   }`}
                   aria-label={`Chuyển đến phim ${idx + 1}`}
                 />
@@ -202,21 +222,24 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie })
               const isRight = offset === 1;
 
               let zIndex = 10;
-              let scaleClass = 'scale-85 opacity-60 hover:opacity-90';
-              let translateClass = '';
-              let heightClass = 'h-[250px] sm:h-[300px] md:h-[340px]';
+              let scaleClass = "scale-85 opacity-60 hover:opacity-90";
+              let translateClass = "";
+              let heightClass = "h-[250px] sm:h-[300px] md:h-[340px]";
 
               if (isCenter) {
                 zIndex = 30;
-                scaleClass = 'scale-100 opacity-100 ring-4 ring-[#E0A030] shadow-[0_20px_60px_rgba(224,160,48,0.4)]';
-                heightClass = 'h-[300px] sm:h-[360px] md:h-[400px]';
-                translateClass = 'translate-x-0 z-30';
+                scaleClass =
+                  "scale-100 opacity-100 ring-4 ring-[#E0A030] shadow-[0_20px_60px_rgba(224,160,48,0.4)]";
+                heightClass = "h-[300px] sm:h-[360px] md:h-[400px]";
+                translateClass = "translate-x-0 z-30";
               } else if (isLeft) {
                 zIndex = 15;
-                translateClass = '-translate-x-[45%] sm:-translate-x-[55%] -rotate-3 z-15';
+                translateClass =
+                  "-translate-x-[45%] sm:-translate-x-[55%] -rotate-3 z-15";
               } else if (isRight) {
                 zIndex = 15;
-                translateClass = 'translate-x-[45%] sm:translate-x-[55%] rotate-3 z-15';
+                translateClass =
+                  "translate-x-[45%] sm:translate-x-[55%] rotate-3 z-15";
               }
 
               return (
@@ -235,11 +258,13 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie })
                   <div
                     className={`relative ${heightClass} aspect-[9/16] rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-[var(--border-color)] bg-black/90 transition-all duration-500 ${scaleClass}`}
                   >
-                    <img
+                    <Image
                       src={movie.posterUrl}
                       alt={movie.title}
-                      className="w-full h-full object-cover object-center"
-                      loading="lazy"
+                      fill
+                      sizes="(max-width: 768px) 180px, 280px"
+                      priority={isCenter}
+                      className="object-cover object-center"
                     />
 
                     {/* Gradient Overlay */}
@@ -277,7 +302,6 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ movies, onSelectMovie })
             })}
           </div>
         </div>
-
       </div>
     </section>
   );

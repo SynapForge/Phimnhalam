@@ -29,6 +29,8 @@ export const metadata: Metadata = {
   },
 };
 
+import NetworkStatusBanner from "@/components/common/NetworkStatusBanner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -39,6 +41,7 @@ export default function RootLayout({
       <body
         className={`${lora.variable} ${beVietnamPro.variable} antialiased selection:bg-[#B83A26] selection:text-[#F5EEE1]`}
       >
+        <NetworkStatusBanner />
         {children}
       </body>
     </html>

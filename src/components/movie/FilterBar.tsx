@@ -2,76 +2,87 @@
 
 import React from 'react';
 import { useCinemaStore } from '@/store/cinema-store';
-import { MovieCategory, AIStyle, AccessType } from '@/types/movie';
-import { Filter, Sparkles, Crown, RotateCcw } from 'lucide-react';
+import { MovieCategory } from '@/types/movie';
+import { DICTIONARY } from '@/types/i18n';
+import { RotateCcw } from 'lucide-react';
 
 const CATEGORIES: MovieCategory[] = [
   'Tất cả',
   'Phim Ngắn AI',
   'Series Nhiều Tập',
+  'Trailer Ý Tưởng',
   'Hoạt Hình & Anime',
   'Dân Gian Huyền Bí',
-];
-
-const AI_STYLES: (AIStyle | 'Tất cả')[] = [
-  'Tất cả',
-  'Cổ trang Dã sử',
-  'Cyberpunk Việt Nam',
-  'Anime Cinematic',
-  'Dân gian & Sơn mài',
-  'Photorealistic Cinema',
 ];
 
 export const FilterBar: React.FC = () => {
   const {
     selectedCategory,
     setSelectedCategory,
-    selectedAIStyle,
-    setSelectedAIStyle,
     selectedAccessType,
     setSelectedAccessType,
     resetFilters,
+    language,
   } = useCinemaStore();
+
+  const t = DICTIONARY[language];
 
   const isFiltered =
     selectedCategory !== 'Tất cả' ||
-    selectedAIStyle !== 'Tất cả' ||
     selectedAccessType !== 'all';
 
+  const categoryLabels: Record<MovieCategory, string> = {
+    'Tất cả': t.catAll,
+    'Phim Ngắn AI': language === 'vi' ? 'Phim Ngắn AI' : 'AI Short Films',
+    'Series Nhiều Tập': language === 'vi' ? 'Series Nhiều Tập' : 'Episodic Series',
+    'Trailer Ý Tưởng': language === 'vi' ? 'Trailer Ý Tưởng' : 'Concept Trailers',
+    'Hoạt Hình & Anime': language === 'vi' ? 'Hoạt Hình & Anime' : 'Animation & Anime',
+    'Dân Gian Huyền Bí': language === 'vi' ? 'Dân Gian Huyền Bí' : 'Folklore & Mystery',
+  };
+
+  const accessOptions = [
+    { type: 'all' as const, label: t.catAll },
+    { type: 'free' as const, label: t.accessFree },
+    { type: 'vip' as const, label: t.accessVip },
+    { type: 'ppv' as const, label: t.accessPpv },
+  ];
+
   return (
-    <div id="the-loai" className="w-full py-4 border-b border-[var(--border-color)]">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        {/* Category Pills (Unified & Clean, no redundant label text) */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                selectedCategory === cat
-                  ? 'bg-[#B83A26] text-[#F5EEE1] shadow-sm font-semibold'
-                  : 'bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-elevated)] border border-[var(--border-color)]'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+    <div id="the-loai" className="w-full py-3.5 border-b border-[var(--border-color)]">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        {/* Horizontal Scrollable Category Pills with Touch Indicators */}
+        <div className="relative -mx-3 px-3 sm:mx-0 sm:px-0">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none touch-pan-x">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`min-h-[38px] px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-200 cursor-pointer flex items-center justify-center select-none ${
+                  selectedCategory === cat
+                    ? 'bg-[#B83A26] text-[#F5EEE1] shadow-sm font-semibold scale-102'
+                    : 'bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-elevated)] border border-[var(--border-color)]'
+                }`}
+              >
+                {categoryLabels[cat]}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Access Type Quick Switch: All / Free / VIP / PPV */}
-        <div className="flex items-center gap-2 flex-shrink-0 self-start sm:self-auto">
-          <div className="flex rounded-lg bg-[var(--bg-surface)] p-0.5 border border-[var(--border-color)] text-xs">
-            {(['all', 'free', 'vip', 'ppv'] as const).map((type) => (
+        {/* Adaptive Access Type Toggle & Reset Action */}
+        <div className="flex items-center justify-between sm:justify-start gap-2 flex-shrink-0 pt-1 md:pt-0">
+          <div className="flex rounded-xl bg-[var(--bg-surface)] p-1 border border-[var(--border-color)] text-xs shadow-xs w-full sm:w-auto">
+            {accessOptions.map(({ type, label }) => (
               <button
                 key={type}
                 onClick={() => setSelectedAccessType(type)}
-                className={`px-2.5 py-1 rounded-md font-medium cursor-pointer transition-colors ${
+                className={`flex-1 sm:flex-initial min-h-[34px] px-3 py-1 rounded-lg font-medium cursor-pointer transition-colors text-center select-none ${
                   selectedAccessType === type
                     ? 'bg-[#B83A26] text-[#F5EEE1] shadow-xs font-semibold'
                     : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
-                {type === 'all' ? 'Tất cả' : type === 'free' ? 'Miễn phí' : type === 'vip' ? 'VIP' : 'Vé 19K'}
+                {label}
               </button>
             ))}
           </div>
@@ -79,8 +90,9 @@ export const FilterBar: React.FC = () => {
           {isFiltered && (
             <button
               onClick={resetFilters}
-              className="p-1.5 rounded-md text-[var(--text-muted)] hover:text-[#B83A26] transition-colors cursor-pointer"
-              title="Đặt lại bộ lọc"
+              className="min-h-[38px] min-w-[38px] flex items-center justify-center p-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[#B83A26] hover:border-[#B83A26]/40 transition-colors cursor-pointer"
+              title={t.resetFilters}
+              aria-label={t.resetFilters}
             >
               <RotateCcw className="w-4 h-4" />
             </button>

@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { MOCK_MOVIES } from '@/data/mock-movies';
 import { Navbar } from '@/components/layout/Navbar';
 import { PricingModal } from '@/components/pricing/PricingModal';
 import { useCinemaStore } from '@/store/cinema-store';
+import { DICTIONARY } from '@/types/i18n';
 import {
   Play,
   Pause,
@@ -16,16 +17,13 @@ import {
   VolumeX,
   Maximize2,
   ChevronLeft,
-  ChevronRight,
   Bookmark,
   Check,
   Heart,
-  Share2,
   Sparkles,
   Lock,
   MessageSquare,
   Send,
-  Star,
   Film,
   SkipBack,
   SkipForward
@@ -34,7 +32,8 @@ import {
 export default function WatchMoviePage() {
   const params = useParams();
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const { language } = useCinemaStore();
+  const t = DICTIONARY[language];
 
   const slug = params?.slug as string;
   const initialEp = parseInt(searchParams.get('ep') || '1', 10);
@@ -47,6 +46,7 @@ export default function WatchMoviePage() {
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isBuffering, setIsBuffering] = useState(false);
   const [pricingOpen, setPricingOpen] = useState(false);
   const [likesCount, setLikesCount] = useState(1280);
   const [isLiked, setIsLiked] = useState(false);
@@ -203,10 +203,10 @@ export default function WatchMoviePage() {
                   </div>
                   <div>
                     <h3 className="font-lora text-base sm:text-lg font-bold text-[#F5EEE1]">
-                      Tập {currentEpisode} Cần Mở Khóa VIP
+                      {t.watchEp} {currentEpisode} {t.watchVipRequired}
                     </h3>
                     <p className="text-[11px] text-[var(--text-muted)] mt-0.5 max-w-xs leading-relaxed">
-                      Các tập tiếp theo thuộc kho phim VIP độ nét cao. Nâng cấp ngay để thưởng thức trọn vẹn.
+                      {t.watchVipDesc}
                     </p>
                   </div>
                   <button
@@ -214,7 +214,7 @@ export default function WatchMoviePage() {
                     className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#B83A26] to-[#E0A030] text-[#F5EEE1] font-bold text-xs shadow-xl transition-transform hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>Mở Khóa Ngay (59.000đ/tháng)</span>
+                    <span>{t.watchUnlockBtn} (59.000đ/tháng)</span>
                   </button>
                 </div>
               ) : (
@@ -224,6 +224,11 @@ export default function WatchMoviePage() {
                   src={videoSource}
                   playsInline
                   autoPlay
+                  onWaiting={() => setIsBuffering(true)}
+                  onPlaying={() => setIsBuffering(false)}
+                  onCanPlay={() => setIsBuffering(false)}
+                  onSeeking={() => setIsBuffering(true)}
+                  onSeeked={() => setIsBuffering(false)}
                   onTimeUpdate={() => {
                     if (videoRef.current) setCurrentTime(videoRef.current.currentTime);
                   }}
@@ -239,8 +244,18 @@ export default function WatchMoviePage() {
                 />
               )}
 
-              {/* Big Centered Play/Pause Indicator (Shown when paused) */}
-              {!isPlaying && !isEpisodeLocked && (
+              {/* Video Buffering / Loading Indicator */}
+              {isBuffering && !isEpisodeLocked && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 backdrop-blur-xs z-25 pointer-events-none">
+                  <div className="w-12 h-12 rounded-full border-3 border-[#E0A030]/20 border-t-[#B83A26] animate-spin mb-2" />
+                  <span className="text-[11px] font-medium text-[#F5EEE1] tracking-wider animate-pulse">
+                    Đang đệm video...
+                  </span>
+                </div>
+              )}
+
+              {/* Big Centered Play/Pause Indicator (Shown when paused and not buffering) */}
+              {!isPlaying && !isEpisodeLocked && !isBuffering && (
                 <div
                   onClick={togglePlay}
                   className="absolute inset-0 flex items-center justify-center bg-black/35 cursor-pointer z-20"
@@ -298,9 +313,17 @@ export default function WatchMoviePage() {
 
                     <div className="flex items-center gap-1 sm:gap-2">
                       <button
+                        onClick={handlePrevEpisode}
+                        disabled={currentEpisode <= 1}
+                        className="p-1 hover:text-[#E0A030] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                        title="Tập trước"
+                      >
+                        <SkipBack className="w-4 h-4" />
+                      </button>
+                      <button
                         onClick={handleNextEpisode}
                         disabled={currentEpisode >= totalEpisodesCount}
-                        className="p-1 hover:text-[#E0A030] transition-colors cursor-pointer"
+                        className="p-1 hover:text-[#E0A030] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                         title="Tập tiếp theo"
                       >
                         <SkipForward className="w-4 h-4" />
@@ -369,7 +392,7 @@ export default function WatchMoviePage() {
                 }`}
               >
                 <Film className="w-3.5 h-3.5 text-[#B83A26]" />
-                <span>Danh Sách Tập</span>
+                <span>{t.watchTabEpisodes}</span>
               </button>
 
               <button
@@ -381,7 +404,7 @@ export default function WatchMoviePage() {
                 }`}
               >
                 <MessageSquare className="w-3.5 h-3.5 text-[#E0A030]" />
-                <span>Bình Luận ({comments.length})</span>
+                <span>{t.watchTabComments} ({comments.length})</span>
               </button>
             </div>
 
@@ -390,8 +413,8 @@ export default function WatchMoviePage() {
               {activeTab === 'episodes' ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
-                    <span>1 - 3 Miễn phí</span>
-                    <span className="text-[#E0A030] font-medium">Bấm để phát ngay</span>
+                    <span>{t.watchFreeEpsHint}</span>
+                    <span className="text-[#E0A030] font-medium">{t.watchClickToPlay}</span>
                   </div>
 
                   {/* 5-Column Compact Grid */}
@@ -407,7 +430,7 @@ export default function WatchMoviePage() {
                             setCurrentEpisode(epNum);
                             if (isLocked) setPricingOpen(true);
                           }}
-                          className={`relative py-2 rounded-xl font-bold text-xs flex flex-col items-center justify-center transition-all cursor-pointer ${
+                          className={`relative min-h-[42px] py-2 rounded-xl font-bold text-xs flex flex-col items-center justify-center transition-all cursor-pointer ${
                             isCurrent
                               ? 'bg-[#B83A26] text-[#F5EEE1] ring-2 ring-[#E0A030] shadow'
                               : isLocked

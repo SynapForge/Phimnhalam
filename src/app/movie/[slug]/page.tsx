@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { MOCK_MOVIES } from '@/data/mock-movies';
@@ -9,7 +10,6 @@ import { MovieCard } from '@/components/movie/MovieCard';
 import { CinemaPlayerModal } from '@/components/player/CinemaPlayerModal';
 import { PricingModal } from '@/components/pricing/PricingModal';
 import { useCinemaStore } from '@/store/cinema-store';
-import { Movie } from '@/types/movie';
 import {
   Play,
   Bookmark,
@@ -19,8 +19,7 @@ import {
   Share2,
   ChevronLeft,
   Film,
-  Sparkles,
-  Info
+  Sparkles
 } from 'lucide-react';
 
 export default function MovieDetailPage() {
@@ -35,7 +34,6 @@ export default function MovieDetailPage() {
   const inWatchlist = watchlist.includes(movie.id);
 
   const [isPlaying, setIsPlaying] = useState(false);
-  const [selectedMovieForModal, setSelectedMovieForModal] = useState<Movie | null>(null);
   const [pricingOpen, setPricingOpen] = useState(false);
   const [selectedEpisodeIdx, setSelectedEpisodeIdx] = useState(0);
 
@@ -82,10 +80,13 @@ export default function MovieDetailPage() {
         <div className="relative w-full border-b border-[var(--border-color)] overflow-hidden py-6 sm:py-10">
           {/* Ambient Backdrop Blur */}
           <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-            <img
+            <Image
               src={movie.posterUrl}
               alt={movie.title}
-              className="w-full h-full object-cover filter blur-3xl opacity-20 scale-125"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover filter blur-3xl opacity-20 scale-125"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)]/80 to-[var(--bg-primary)]/50" />
           </div>
@@ -95,10 +96,13 @@ export default function MovieDetailPage() {
               
               {/* Left: 9:16 Vertical Poster Spotlight */}
               <div className="flex-shrink-0 group relative w-56 sm:w-64 md:w-72 aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl border-2 border-[var(--border-color)] bg-black/90">
-                <img
+                <Image
                   src={movie.posterUrl}
                   alt={movie.title}
-                  className="w-full h-full object-cover object-center"
+                  fill
+                  priority
+                  sizes="(max-width: 640px) 224px, (max-width: 768px) 256px, 288px"
+                  className="object-cover object-center"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
                 

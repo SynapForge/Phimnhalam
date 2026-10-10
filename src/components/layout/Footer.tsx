@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { BrandLogo } from '@/components/brand/BrandLogo';
-import { useCinemaStore } from '@/store/cinema-store';
-import { DICTIONARY } from '@/types/i18n';
-import { Heart, ShieldCheck, Sparkles } from 'lucide-react';
+import React from "react";
+import { BrandLogo } from "@/components/brand/BrandLogo";
+import { useCinemaStore } from "@/store/cinema-store";
+import { DICTIONARY } from "@/types/i18n";
+import { Heart, ShieldCheck, Sparkles } from "lucide-react";
 
 export const Footer: React.FC = () => {
   const { language } = useCinemaStore();
@@ -32,10 +32,46 @@ export const Footer: React.FC = () => {
               {t.footerCinemaCategories}
             </h4>
             <ul className="space-y-2 text-xs text-[var(--text-secondary)]">
-              <li><a href="#the-loai" className="hover:text-[#B83A26] transition-colors">{language === 'vi' ? 'Phim Dã Sử & Cổ Trang AI' : 'Historical & Dynasty AI'}</a></li>
-              <li><a href="#the-loai" className="hover:text-[#B83A26] transition-colors">{language === 'vi' ? 'Cyberpunk Việt Nam 2088' : 'Saigon Cyberpunk 2088'}</a></li>
-              <li><a href="#the-loai" className="hover:text-[#B83A26] transition-colors">{language === 'vi' ? 'Hoạt Hình Niji Anime' : 'Niji Anime Cinema'}</a></li>
-              <li><a href="#the-loai" className="hover:text-[#B83A26] transition-colors">{language === 'vi' ? 'Tranh Sơn Mài Dân Gian' : 'Lacquer Art Folklore'}</a></li>
+              <li>
+                <a
+                  href="#the-loai"
+                  className="hover:text-[#B83A26] transition-colors"
+                >
+                  {language === "vi"
+                    ? "Phim Dã Sử & Cổ Trang AI"
+                    : "Historical & Dynasty AI"}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#the-loai"
+                  className="hover:text-[#B83A26] transition-colors"
+                >
+                  {language === "vi"
+                    ? "Cyberpunk Việt Nam 2088"
+                    : "Saigon Cyberpunk 2088"}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#the-loai"
+                  className="hover:text-[#B83A26] transition-colors"
+                >
+                  {language === "vi"
+                    ? "Hoạt Hình Niji Anime"
+                    : "Niji Anime Cinema"}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#the-loai"
+                  className="hover:text-[#B83A26] transition-colors"
+                >
+                  {language === "vi"
+                    ? "Tranh Sơn Mài Dân Gian"
+                    : "Lacquer Art Folklore"}
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -45,10 +81,36 @@ export const Footer: React.FC = () => {
               {t.footerBusiness}
             </h4>
             <ul className="space-y-2 text-xs text-[var(--text-secondary)]">
-              <li><a href="#pricing" className="hover:text-[#B83A26] transition-colors">{t.navPricing}</a></li>
-              <li><span className="hover:text-[#B83A26] cursor-pointer">{language === 'vi' ? 'Cổng Thanh Toán PayOS Tức Thời' : 'Instant PayOS Checkout'}</span></li>
-              <li><span className="hover:text-[#B83A26] cursor-pointer">{language === 'vi' ? 'Dịch Vụ Sản Xuất Video AI B2B' : 'B2B Generative Production'}</span></li>
-              <li><span className="hover:text-[#B83A26] cursor-pointer">{language === 'vi' ? 'Chính Sách Bản Quyền & Prompt' : 'Prompt & IP Rights Policy'}</span></li>
+              <li>
+                <a
+                  href="#pricing"
+                  className="hover:text-[#B83A26] transition-colors"
+                >
+                  {t.navPricing}
+                </a>
+              </li>
+              <li>
+                <span className="hover:text-[#B83A26] cursor-pointer">
+                  {language === "vi"
+                    ? "Cổng Thanh Toán Tức Thời"
+                    : "Instant  Checkout"}
+                </span>
+              </li>
+              <li>
+                <a
+                  href="/studio"
+                  className="hover:text-[#E0A030] transition-colors font-medium flex items-center gap-1"
+                >
+                  <span>{language === "vi" ? "Studio Sản Xuất Video AI (Zalo)" : "Generative AI Studio"}</span>
+                </a>
+              </li>
+              <li>
+                <span className="hover:text-[#B83A26] cursor-pointer">
+                  {language === "vi"
+                    ? "Chính Sách Bản Quyền & Prompt"
+                    : "Prompt & IP Rights Policy"}
+                </span>
+              </li>
             </ul>
           </div>
 

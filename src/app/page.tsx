@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -9,12 +10,26 @@ import { FilterBar } from '@/components/movie/FilterBar';
 import { MovieRow } from '@/components/movie/MovieRow';
 import { MovieCard } from '@/components/movie/MovieCard';
 import { CinemaNoticeBanner } from '@/components/movie/CinemaNoticeBanner';
-import { CinemaPlayerModal } from '@/components/player/CinemaPlayerModal';
-import { PricingModal } from '@/components/pricing/PricingModal';
 import { MOCK_MOVIES } from '@/data/mock-movies';
 import { Movie } from '@/types/movie';
 import { useCinemaStore } from '@/store/cinema-store';
 import { Film } from 'lucide-react';
+
+// Code splitting: Dynamically import heavy modals on demand
+const CinemaPlayerModal = dynamic(
+  () => import('@/components/player/CinemaPlayerModal').then((mod) => mod.CinemaPlayerModal),
+  { ssr: false }
+);
+
+const PricingModal = dynamic(
+  () => import('@/components/pricing/PricingModal').then((mod) => mod.PricingModal),
+  { ssr: false }
+);
+
+const OnboardingModal = dynamic(
+  () => import('@/components/onboarding/OnboardingModal').then((mod) => mod.OnboardingModal),
+  { ssr: false }
+);
 
 export default function HomePage() {
   const router = useRouter();
@@ -120,7 +135,7 @@ export default function HomePage() {
               </div>
 
               {filteredMovies.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5 md:gap-6">
                   {filteredMovies.map((movie) => (
                     <MovieCard key={movie.id} movie={movie} onSelect={handleSelectMovie} />
                   ))}
@@ -205,6 +220,9 @@ export default function HomePage() {
 
       {/* Commercial Pricing Modal (VIP + PPV + PayOS SSE Mockup) */}
       <PricingModal isOpen={pricingOpen} onClose={() => setPricingOpen(false)} />
+
+      {/* First-run Onboarding Modal */}
+      <OnboardingModal />
     </div>
   );
 }

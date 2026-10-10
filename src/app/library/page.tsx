@@ -1,29 +1,21 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
-import { MovieCard } from '@/components/movie/MovieCard';
-import { useCinemaStore } from '@/store/cinema-store';
-import { MOCK_MOVIES } from '@/data/mock-movies';
-import {
-  Bookmark,
-  History,
-  Trash2,
-  Play,
-  Clock,
-  Sparkles,
-  Film,
-  CheckCircle2,
-  ChevronRight,
-  ArrowRight
-} from 'lucide-react';
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { MovieCard } from "@/components/movie/MovieCard";
+import { useCinemaStore } from "@/store/cinema-store";
+import { MOCK_MOVIES } from "@/data/mock-movies";
+import { Bookmark, History, Trash2, Play, Film } from "lucide-react";
 
 export default function LibraryPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'watchlist' | 'history'>('watchlist');
+  const [activeTab, setActiveTab] = useState<"watchlist" | "history">(
+    "watchlist",
+  );
 
   const {
     watchlist,
@@ -52,7 +44,7 @@ export default function LibraryPage() {
 
   const formatTimeAgo = (time: number) => {
     const diff = Math.floor((Date.now() - time) / 60000); // minutes
-    if (diff < 1) return 'Vừa xem';
+    if (diff < 1) return "Vừa xem";
     if (diff < 60) return `${diff} phút trước`;
     const hours = Math.floor(diff / 60);
     if (hours < 24) return `${hours} giờ trước`;
@@ -64,7 +56,6 @@ export default function LibraryPage() {
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 w-full space-y-6">
-        
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-color)] pb-6">
           <div>
@@ -73,18 +64,19 @@ export default function LibraryPage() {
               <span>Tủ Phim Của Bạn</span>
             </h1>
             <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1.5 ml-5.5">
-              Quản lý danh sách các bộ phim lưu xem sau và theo dõi tiến trình lịch sử tập phim đã xem.
+              Quản lý danh sách các bộ phim lưu xem sau và theo dõi tiến trình
+              lịch sử tập phim đã xem.
             </p>
           </div>
 
           {/* Action Tabs Switcher */}
           <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-color)]">
             <button
-              onClick={() => setActiveTab('watchlist')}
+              onClick={() => setActiveTab("watchlist")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'watchlist'
-                  ? 'bg-[#B83A26] text-[#F5EEE1] shadow-md'
-                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                activeTab === "watchlist"
+                  ? "bg-[#B83A26] text-[#F5EEE1] shadow-md"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               }`}
             >
               <Bookmark className="w-3.5 h-3.5" />
@@ -92,11 +84,11 @@ export default function LibraryPage() {
             </button>
 
             <button
-              onClick={() => setActiveTab('history')}
+              onClick={() => setActiveTab("history")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'history'
-                  ? 'bg-[#E0A030] text-[#211D18] shadow-md'
-                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                activeTab === "history"
+                  ? "bg-[#E0A030] text-[#211D18] shadow-md"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               }`}
             >
               <History className="w-3.5 h-3.5" />
@@ -106,7 +98,7 @@ export default function LibraryPage() {
         </div>
 
         {/* TAB 1: WATCHLIST SECTION */}
-        {activeTab === 'watchlist' && (
+        {activeTab === "watchlist" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="font-lora text-lg sm:text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
@@ -117,7 +109,11 @@ export default function LibraryPage() {
               {watchlistMovies.length > 0 && (
                 <button
                   onClick={() => {
-                    if (confirm('Bạn có chắc muốn xóa tất cả phim đã lưu trong danh sách xem sau?')) {
+                    if (
+                      confirm(
+                        "Bạn có chắc muốn xóa tất cả phim đã lưu trong danh sách xem sau?",
+                      )
+                    ) {
                       clearWatchlist();
                     }
                   }}
@@ -158,7 +154,8 @@ export default function LibraryPage() {
                     Danh Sách Xem Sau Đang Trống
                   </h3>
                   <p className="text-xs text-[var(--text-muted)] mt-1">
-                    Bạn chưa lưu bộ phim nào. Hãy bấm biểu tượng &quot;Lưu Xem Sau&quot; ở trang chi tiết phim để theo dõi thuận tiện hơn!
+                    Bạn chưa lưu bộ phim nào. Hãy bấm biểu tượng &quot;Lưu Xem
+                    Sau&quot; ở trang chi tiết phim để theo dõi thuận tiện hơn!
                   </p>
                 </div>
                 <Link
@@ -174,7 +171,7 @@ export default function LibraryPage() {
         )}
 
         {/* TAB 2: WATCH HISTORY SECTION */}
-        {activeTab === 'history' && (
+        {activeTab === "history" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="font-lora text-lg sm:text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
@@ -185,7 +182,9 @@ export default function LibraryPage() {
               {historyItems.length > 0 && (
                 <button
                   onClick={() => {
-                    if (confirm('Bạn có chắc muốn xóa toàn bộ lịch sử xem phim?')) {
+                    if (
+                      confirm("Bạn có chắc muốn xóa toàn bộ lịch sử xem phim?")
+                    ) {
                       clearWatchHistory();
                     }
                   }}
@@ -208,14 +207,18 @@ export default function LibraryPage() {
                     >
                       {/* Left: Thumbnail 9:16 vertical crop */}
                       <div
-                        onClick={() => router.push(`/watch/${item.movie.slug}?ep=${epNum}`)}
+                        onClick={() =>
+                          router.push(`/watch/${item.movie.slug}?ep=${epNum}`)
+                        }
                         className="flex items-center gap-3.5 cursor-pointer flex-1 min-w-0"
                       >
                         <div className="relative w-16 sm:w-20 aspect-[9/16] rounded-xl overflow-hidden bg-black flex-shrink-0 border border-[var(--border-color)]">
-                          <img
+                          <Image
                             src={item.movie.posterUrl}
                             alt={item.movie.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                            fill
+                            sizes="(max-width: 640px) 64px, 80px"
+                            className="object-cover group-hover:scale-105 transition-transform"
                           />
                           <div className="absolute inset-0 bg-black/25 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <div className="w-7 h-7 rounded-full bg-[#B83A26] text-white flex items-center justify-center shadow">
@@ -240,7 +243,8 @@ export default function LibraryPage() {
                           </h3>
 
                           <p className="text-[11px] text-[var(--text-muted)] truncate">
-                            {item.movie.category} • {item.movie.duration} • ★ {item.movie.rating}
+                            {item.movie.category} • {item.movie.duration} • ★{" "}
+                            {item.movie.rating}
                           </p>
 
                           {/* Fake progress indicator */}
@@ -248,7 +252,9 @@ export default function LibraryPage() {
                             <div className="w-24 sm:w-32 h-1 bg-white/20 rounded-full overflow-hidden">
                               <div
                                 className="h-full bg-[#B83A26] rounded-full"
-                                style={{ width: `${Math.min(90, Math.max(25, item.progressSeconds % 100))}%` }}
+                                style={{
+                                  width: `${Math.min(90, Math.max(25, item.progressSeconds % 100))}%`,
+                                }}
                               />
                             </div>
                             <span>Còn 1 phút</span>
@@ -259,7 +265,9 @@ export default function LibraryPage() {
                       {/* Right Action: Play resume & Delete button */}
                       <div className="flex items-center gap-2 pl-3 flex-shrink-0">
                         <button
-                          onClick={() => router.push(`/watch/${item.movie.slug}?ep=${epNum}`)}
+                          onClick={() =>
+                            router.push(`/watch/${item.movie.slug}?ep=${epNum}`)
+                          }
                           className="px-3.5 py-2 rounded-xl bg-[#B83A26] hover:bg-[#a03220] text-[#F5EEE1] font-bold text-xs flex items-center gap-1 shadow transition-transform hover:scale-105 active:scale-95 cursor-pointer"
                         >
                           <Play className="w-3.5 h-3.5 fill-current" />
@@ -289,7 +297,8 @@ export default function LibraryPage() {
                     Lịch Sử Xem Phim Trống
                   </h3>
                   <p className="text-xs text-[var(--text-muted)] mt-1">
-                    Khi bạn phát bất kỳ bộ phim nào, lịch sử tiến trình và tập phim đang xem dở sẽ tự động được ghi lại ở đây.
+                    Khi bạn phát bất kỳ bộ phim nào, lịch sử tiến trình và tập
+                    phim đang xem dở sẽ tự động được ghi lại ở đây.
                   </p>
                 </div>
                 <Link
@@ -303,7 +312,6 @@ export default function LibraryPage() {
             )}
           </div>
         )}
-
       </main>
 
       <Footer />

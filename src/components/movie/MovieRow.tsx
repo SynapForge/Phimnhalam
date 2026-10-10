@@ -49,7 +49,12 @@ export const MovieRow: React.FC<MovieRowProps> = ({
       {/* Horizontal Carousel List */}
       <div className="flex items-center gap-4 overflow-x-auto pb-4 pt-1 scrollbar-thin scrollbar-thumb-[var(--border-color)]">
         {movies.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} onSelect={onSelectMovie} />
+          <MovieCard
+            key={movie.id}
+            movie={movie}
+            onSelect={onSelectMovie}
+            className="w-44 sm:w-52 md:w-56 flex-shrink-0"
+          />
         ))}
       </div>
     </section>

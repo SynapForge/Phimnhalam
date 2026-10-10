@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { BrandLogo } from '@/components/brand/BrandLogo';
+import React from "react";
+import Link from "next/link";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import {
   LayoutDashboard,
   Film,
   CalendarCheck,
   TrendingUp,
   ArrowLeft,
-} from 'lucide-react';
+} from "lucide-react";
 
-export type AdminTab = 'overview' | 'movies' | 'bookings' | 'revenue';
+export type AdminTab = "overview" | "movies" | "bookings" | "revenue";
 
 interface AdminSidebarProps {
   currentTab: AdminTab;
@@ -23,10 +23,18 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
   onSelectTab,
 }) => {
   const menuItems = [
-    { id: 'overview' as AdminTab, label: 'Tổng Quan Báo Cáo', icon: LayoutDashboard },
-    { id: 'movies' as AdminTab, label: 'Quản Trị Kho Phim', icon: Film },
-    { id: 'bookings' as AdminTab, label: 'Booking Video AI (B2B)', icon: CalendarCheck },
-    { id: 'revenue' as AdminTab, label: 'Doanh Thu PayOS', icon: TrendingUp },
+    {
+      id: "overview" as AdminTab,
+      label: "Tổng Quan Báo Cáo",
+      icon: LayoutDashboard,
+    },
+    { id: "movies" as AdminTab, label: "Quản Trị Kho Phim", icon: Film },
+    {
+      id: "bookings" as AdminTab,
+      label: "Booking Video AI (B2B)",
+      icon: CalendarCheck,
+    },
+    { id: "revenue" as AdminTab, label: "Doanh Thu ", icon: TrendingUp },
   ];
 
   return (
@@ -53,11 +61,13 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                 onClick={() => onSelectTab(item.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
                   isActive
-                    ? 'bg-[#B83A26] text-[#F5EEE1] shadow-md'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]'
+                    ? "bg-[#B83A26] text-[#F5EEE1] shadow-md"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-primary)]"
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-[#F5EEE1]' : 'text-[#E0A030]'}`} />
+                <Icon
+                  className={`w-4 h-4 ${isActive ? "text-[#F5EEE1]" : "text-[#E0A030]"}`}
+                />
                 <span>{item.label}</span>
               </button>
             );

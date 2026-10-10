@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import Image from 'next/image';
 import Hls from 'hls.js';
 import { Movie, Episode } from '@/types/movie';
 import {
@@ -12,9 +13,7 @@ import {
   VolumeX,
   Maximize,
   Minimize,
-  Sliders,
   Sparkles,
-  Smartphone,
   X
 } from 'lucide-react';
 
@@ -35,7 +34,6 @@ export const CinemaPlayerModal: React.FC<CinemaPlayerModalProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1);
@@ -50,7 +48,9 @@ export const CinemaPlayerModal: React.FC<CinemaPlayerModalProps> = ({
     if (typeof window !== 'undefined' && 'navigator' in window && 'vibrate' in navigator) {
       try {
         navigator.vibrate(ms);
-      } catch (err) {}
+      } catch {
+        // Ignore haptic failures
+      }
     }
   };
 
@@ -91,6 +91,18 @@ export const CinemaPlayerModal: React.FC<CinemaPlayerModalProps> = ({
     };
   }, [videoSource, movie.teaserVideoUrl]);
 
+  // Handle Play/Pause
+  const togglePlay = useCallback(() => {
+    if (!videoRef.current) return;
+    triggerHaptic(30);
+    if (isPlaying) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play().catch(() => {});
+    }
+    setIsPlaying((prev) => !prev);
+  }, [isPlaying]);
+
   // Handle keyboard shortcuts (Escape to close, Space to toggle play)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -105,19 +117,7 @@ export const CinemaPlayerModal: React.FC<CinemaPlayerModalProps> = ({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isPlaying, onClose]);
-
-  // Handle Play/Pause
-  const togglePlay = () => {
-    if (!videoRef.current) return;
-    triggerHaptic(30);
-    if (isPlaying) {
-      videoRef.current.pause();
-    } else {
-      videoRef.current.play().catch(() => {});
-    }
-    setIsPlaying(!isPlaying);
-  };
+  }, [onClose, togglePlay]);
 
   // Skip 10s Backward / Forward (Mobile gesture tap / buttons)
   const skip = (seconds: number) => {
@@ -390,11 +390,15 @@ export const CinemaPlayerModal: React.FC<CinemaPlayerModalProps> = ({
                         : 'border-[var(--border-color)] hover:bg-[var(--bg-primary)]'
                     }`}
                   >
-                    <img
-                      src={ep.thumbnailUrl}
-                      alt={ep.title}
-                      className="w-16 h-10 object-cover rounded"
-                    />
+                    <div className="relative w-16 h-10 rounded overflow-hidden flex-shrink-0">
+                      <Image
+                        src={ep.thumbnailUrl}
+                        alt={ep.title}
+                        fill
+                        sizes="64px"
+                        className="object-cover"
+                      />
+                    </div>
                     <div className="text-xs truncate">
                       <p className="font-semibold text-[var(--text-primary)] truncate">{ep.title}</p>
                       <p className="text-[10px] text-[var(--text-muted)]">{ep.duration}</p>

@@ -1,65 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Calendar, Phone, Mail, Clock, CheckCircle, AlertCircle, Plus } from 'lucide-react';
-
-interface BookingOrder {
-  id: string;
-  clientName: string;
-  company?: string;
-  email: string;
-  phone: string;
-  projectType: string;
-  budget: string;
-  deadline: string;
-  status: 'pending' | 'reviewing' | 'completed';
-  notes: string;
-}
+import React from 'react';
+import { Calendar, Phone, Mail, Plus } from 'lucide-react';
+import { useCinemaStore } from '@/store/cinema-store';
 
 export const BookingTable: React.FC = () => {
-  const [bookings, setBookings] = useState<BookingOrder[]>([
-    {
-      id: 'BK-2026-01',
-      clientName: 'Công ty Cổ phần VinFast Heritage',
-      company: 'VinFast Creative',
-      email: 'marketing@vinfast.vn',
-      phone: '0912 345 678',
-      projectType: 'Video AI TVC Quảng cáo 60s (Dân gian + Công nghệ)',
-      budget: '85.000.000đ',
-      deadline: '25/10/2026',
-      status: 'reviewing',
-      notes: 'Yêu cầu phong cách tranh sơn mài kết hợp xe điện tương lai bằng Runway Gen-3.',
-    },
-    {
-      id: 'BK-2026-02',
-      clientName: 'Đạo diễn độc lập Phan Gia Nhật',
-      company: 'Indie Film Lab',
-      email: 'nhatphan.director@gmail.com',
-      phone: '0988 776 554',
-      projectType: 'Trailer Phim Điện Ảnh Lịch Sử (Kling AI v1.5)',
-      budget: '45.000.000đ',
-      deadline: '15/11/2026',
-      status: 'pending',
-      notes: 'Cần hỗ trợ tạo 30 cảnh chiến trận phục trang thời Trần chuẩn xác.',
-    },
-    {
-      id: 'BK-2026-03',
-      clientName: 'Tập đoàn Cà phê Trung Nguyên Legend',
-      company: 'Trung Nguyên Heritage',
-      email: 'brand@trungnguyen.com.vn',
-      phone: '0903 112 233',
-      projectType: 'Phim Tài Liệu Triết Đạo Cà Phê AI 4K',
-      budget: '120.000.000đ',
-      deadline: '05/10/2026',
-      status: 'completed',
-      notes: 'Đã hoàn thiện nghiệm thu và bàn giao bộ prompt gốc.',
-    },
-  ]);
+  const { bookings, updateBookingStatus } = useCinemaStore();
 
   const updateStatus = (id: string, newStatus: 'pending' | 'reviewing' | 'completed') => {
-    setBookings((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
-    );
+    updateBookingStatus(id, newStatus);
   };
 
   return (
@@ -83,9 +32,9 @@ export const BookingTable: React.FC = () => {
 
       {/* Bookings Table */}
       <div className="rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-color)] overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="border-b border-[var(--border-color)] bg-[var(--bg-primary)]/50 text-[var(--text-muted)]">
+        <div className="overflow-x-auto overflow-y-auto max-h-[480px] hover-scrollbar">
+          <table className="w-full text-left text-xs min-w-[650px]">
+            <thead className="sticky top-0 z-10 border-b border-[var(--border-color)] bg-[var(--bg-primary)]/95 backdrop-blur-md text-[var(--text-muted)]">
               <tr>
                 <th className="p-4 font-semibold">Khách Hàng & Doanh Nghiệp</th>
                 <th className="p-4 font-semibold">Gói Yêu Cầu</th>
@@ -99,8 +48,15 @@ export const BookingTable: React.FC = () => {
               {bookings.map((booking) => (
                 <tr key={booking.id} className="hover:bg-[var(--bg-primary)]/40 transition-colors">
                   <td className="p-4">
-                    <div className="font-semibold text-[var(--text-primary)] text-sm">
-                      {booking.clientName}
+                    <div className="flex items-center gap-2">
+                      <div className="font-semibold text-[var(--text-primary)] text-sm">
+                        {booking.clientName}
+                      </div>
+                      {booking.fromStudio && (
+                        <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#0068FF]/15 text-[#0068FF] border border-[#0068FF]/30">
+                          Zalo Studio
+                        </span>
+                      )}
                     </div>
                     <div className="text-[11px] text-[var(--text-muted)] flex items-center gap-3 mt-1">
                       <span className="flex items-center gap-1">
