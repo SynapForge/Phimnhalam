@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2D2721"/>
+      <stop offset="100%" stop-color="#181512"/>
+    </linearGradient>
+  </defs>
+  <!-- Background rounded canvas -->
+  <rect width="128" height="128" rx="26" fill="url(#bg)"/>
+  <rect width="126" height="126" x="1" y="1" rx="25" fill="none" stroke="#E0A030" stroke-width="1.5" stroke-opacity="0.35"/>
+
+  <!-- Logo Mark: Mái đình truyền thống + TV màn hình chữ nhật bo tròn + Nút Play tam giác -->
+  <g transform="translate(14, 21)">
+    <!-- Mái đình cong cổ truyền -->
+    <path
+      d="M 50 3 
+         C 53 3, 56 6, 61 10 
+         C 67 14, 73 16, 85 18 
+         C 95 19, 99 15, 100 23 
+         C 97 28, 86 31, 79 32 
+         C 74 33, 72 36, 71 39 
+         L 29 39 
+         C 28 36, 26 33, 21 32 
+         C 14 31, 3 28, 0 23 
+         C 1 15, 5 19, 15 18 
+         C 27 16, 33 14, 39 10 
+         C 44 6, 47 3, 50 3 Z"
+      fill="#E0A030"
+    />
+
+    <!-- Thân hộp Video Player bo góc mềm mại -->
+    <rect
+      x="16"
+      y="35"
+      width="68"
+      height="48"
+      rx="10"
+      fill="#E0A030"
+    />
+
+    <!-- Nút Play tam giác ở tâm màn hình -->
+    <path d="M 44 47 L 62 59 L 44 71 Z" fill="#211D18"/>
+  </g>
+</svg>

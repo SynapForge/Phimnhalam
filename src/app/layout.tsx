@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Lora, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
+import NetworkStatusBanner from "@/components/common/NetworkStatusBanner";
 
 const lora = Lora({
   variable: "--font-lora",
@@ -20,6 +21,13 @@ export const metadata: Metadata = {
   title: "Phim Nhà Làm - Ai Cũng Là Nhà Làm Phim | AI Cinema",
   description: "Nền tảng phim điện ảnh và video ngắn thế hệ mới sáng tạo bằng AI mang đậm bản sắc văn hóa Việt Nam.",
   keywords: ["phim ai", "ai cinema", "phim nha lam", "video ai", "runway", "kling ai", "sora viet nam"],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "Phim Nhà Làm - Ai Cũng Là Nhà Làm Phim",
     description: "Khám phá các tác phẩm điện ảnh và video sáng tạo đột phá từ công nghệ AI.",
@@ -28,8 +36,6 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
-
-import NetworkStatusBanner from "@/components/common/NetworkStatusBanner";
 
 export default function RootLayout({
   children,
